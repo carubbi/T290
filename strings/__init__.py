@@ -1,0 +1,1 @@
+from .boyer_moore import BoyerMoore

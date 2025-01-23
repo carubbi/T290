@@ -1,0 +1,35 @@
+Formato de entrada para Lista de Arestas:
+V E  
+Para cada aresta:  
+u v (w se ponderado)
+
+Exemplo (indexado em 1):  
+4 6 (4 vértices, 6 arestas)  
+1 2  
+2 3  
+3 1  
+1 4  
+4 3  
+
+Formato de entrada para Matriz de Adjacência:  
+V  
+Matriz de Adjacência  
+
+Exemplo:  
+4  
+0 1 1 1  
+1 0 1 0  
+1 1 0 1  
+1 0 1 0  
+
+Formato de entrada para Lista de Adjacência:  
+V  
+Para cada vértice:  
+Grau(v) v1 (w1) v2 (w2)...  
+
+Exemplo (não ponderado, indexado em 1):  
+4  
+3 2 3 4  
+2 1 3  
+3 1 2 4  
+2 1 3
