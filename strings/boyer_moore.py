@@ -5,41 +5,36 @@ import sys
 
 
 class BoyerMoore:
-    """The BoyerMoore class finds the first occurence of a pattern string in a
-    text string.
+    """
+    A classe BoyerMoore encontra a primeira ocorrência de uma string padrão em uma string de texto.
 
-    This implementation uses the Boyer-Moore algorithm (with the bad-
-    character rule, but not the strong good suffix rule).
-
+    Esta implementação utiliza o algoritmo Boyer-Moore (com a regra de caractere ruim, mas sem a regra forte de sufixo bom).
     """
 
     def __init__(self, pat):
-        """Preprocesses the pattern string.
+        """
+        Pré-processa a string padrão.
 
-        :param pat: the pattern string
-
+        :param pat: a string padrão
         """
         self.pat = pat
         M = len(pat)
         R = 256
-        self.right = [-1 for i in range(0, R)]  # -1 for chars not in pattern
+        self.right = [-1 for i in range(0, R)]  # -1 para caracteres que não estão no padrão
         for j in range(0, M):
             self.right[ord(pat[j])] = j
 
     def search(self, txt):
-        """Returns the index of the first occurrrence of the pattern string in
-        the text string.
+        """
+        Retorna o índice da primeira ocorrência da string padrão na string de texto.
 
-        :param txt: the text string
-        :return: the index of the first occurrence of the pattern string
-        in the text string; N if no such match
-
+        :param txt: a string de texto
+        :return: o índice da primeira ocorrência da string padrão na string de texto; N se não houver correspondência
         """
         N = len(txt)
         M = len(self.pat)
         skip = 0
         i = 0
-        # for i in range(0,N-M+1,skip):
         while i <= N - M:
             skip = 0
             for j in range(M - 1, -1, -1):
@@ -55,13 +50,12 @@ class BoyerMoore:
 
 
 def main():
-    """Takes a pattern string and an input string as command-line arguments;
-    searches for the pattern string in the text string; and prints the first
-    occurrence of the pattern string in the text string.
+    """
+    Recebe uma string padrão e uma string de entrada como argumentos de linha de comando;
+    busca a string padrão na string de texto; e imprime a primeira ocorrência
+    da string padrão na string de texto.
 
-    Will print the pattern after the end of the string if no match is
-    found.
-
+    Imprime o padrão após o final da string caso nenhuma correspondência seja encontrada.
     """
     pat = sys.argv[1]
     txt = sys.argv[2]

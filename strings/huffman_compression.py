@@ -11,9 +11,9 @@ edtition by Robert Sedgewick and Kevin Wayne.
 """
 import sys
 
-from itu.algs4.sorting.min_pq import MinPQ
-from itu.algs4.stdlib.binary_stdin import BinaryStdIn
-from itu.algs4.stdlib.binary_stdout import BinaryStdOut
+from sorting import MinPQ
+from stdlib import BinaryStdIn
+from stdlib import BinaryStdOut
 
 _R = 256
 

@@ -2,8 +2,8 @@
 # see README.md for details
 # This is python3
 
-from fundamentals import Bag
-from fundamentals import Stack
+from .. fundamentals import Bag
+from .. fundamentals import Stack
 
 
 class Graph:
@@ -165,8 +165,8 @@ class Graph:
 def main():
     import sys
 
-    from stdlib import writeln
-    from stdlib import InStream
+    from .. stdlib import writeln
+    from .. stdlib import InStream
 
     In = InStream(sys.argv[1])
     G = Graph.from_stream(In)

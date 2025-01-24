@@ -1,122 +1,100 @@
-# code based on https://introcs.cs.princeton.edu/python/code/stdlib-python.zip as downloaded in dec 2017
-
-"""stdio.py.
-
-The stdio module supports reading from standard input and writing to
-sys.stdout.
-
-Note:  Usually it's a bad idea to mix these three sets of reading
-functions:
-
--- isEmpty(), readInt(), readFloat(), readBool(), readString()
-
--- hasNextLine(), readLine()
-
--- readAll(), readAllInts(), readAllFloats(), readAllBools(),
-   readAllStrings(), readAllLines()
-
-Usually it's better to use one set exclusively.
-
-"""
-
 import re
 import sys
 
 # -----------------------------------------------------------------------
-
-# Change sys.stdin so it provides universal newline support.
-
+# Ajusta sys.stdin para suportar newlines universais.
 if sys.hexversion < 0x03000000:
     import os
 
+    # Substitui sys.stdin para suportar quebras de linha universais no Python 2.
     sys.stdin = os.fdopen(sys.stdin.fileno(), "rU", 0)
 else:
+    # Substitui sys.stdin para suportar quebras de linha universais no Python 3.
     sys.stdin = open(sys.stdin.fileno(), "r", newline=None)
 
 # =======================================================================
-# print to stderr
-# from https://stackoverflow.com/questions/5574702/how-to-print-to-stderr-in-python#14981125
+# Função para imprimir mensagens em stderr.
+# Baseado em: https://stackoverflow.com/questions/5574702/how-to-print-to-stderr-in-python#14981125
 # =======================================================================
-
 
 def eprint(*args, **kwargs):
+    """
+    Imprime mensagens no fluxo de erro padrão (stderr).
+
+    :param args: Argumentos posicionais para a função print.
+    :param kwargs: Argumentos nomeados para a função print.
+    :returns: None
+    """
     print(*args, file=sys.stderr, **kwargs)
 
-
 # =======================================================================
-# Writing functions
+# Funções para escrita na saída padrão.
 # =======================================================================
-
 
 def writeln(x=""):
-    """Escreve x na saída padrão sem adicionar uma quebra de linha.
+    """
+    Escreve x na saída padrão seguido por uma quebra de linha.
 
     :param x: O texto a ser escrito.
+    :returns: None
     """
     if sys.hexversion < 0x03000000:
         print("Error: Python 3 is required.", file=sys.stderr)
         sys.exit(1)
-        # x = unicode(x)
-        # x = x.encode("utf-8")
     else:
         x = str(x)
-    
+
     sys.stdout.write(x)
     sys.stdout.write("\n")
     sys.stdout.flush()
 
-
 # -----------------------------------------------------------------------
 
-
 def write(x=""):
-    """Escreve x na saída padrão sem adicionar uma quebra de linha.
+    """
+    Escreve x na saída padrão sem adicionar uma quebra de linha.
 
     :param x: O texto a ser escrito.
+    :returns: None
     """
     if sys.hexversion < 0x03000000:
         print("Error: Python 3 is required.", file=sys.stderr)
         sys.exit(1)
-        # x = unicode(x)
-        # x = x.encode("utf-8")
     else:
         x = str(x)
-    
+
     sys.stdout.write(x)
     sys.stdout.flush()
 
-
 # -----------------------------------------------------------------------
 
-
 def writef(fmt, *args):
-    """Escreve x na saída padrão com um formato especificado.
+    """
+    Escreve na saída padrão com um formato especificado.
 
     :param fmt: A string de formato.
     :param args: Os argumentos a serem formatados e escritos.
+    :returns: None
     """
     x = fmt % args
     if sys.hexversion < 0x03000000:
         print("Error: Python 3 is required.", file=sys.stderr)
         sys.exit(1)
-        # x = unicode(x)
-        # x = x.encode("utf-8")
-    
+
     sys.stdout.write(x)
     sys.stdout.flush()
 
-
 # =======================================================================
-# Reading functions
+# Funções para leitura da entrada padrão.
 # =======================================================================
 
 _buffer = ""
 
 # -----------------------------------------------------------------------
 
-
 def _readRegExp(regExp):
-    """Descarta os caracteres em branco iniciais da entrada padrão.
+    """
+    Descarta os caracteres em branco iniciais da entrada padrão.
 
     Em seguida, lê da entrada padrão e retorna uma string que corresponde
     à expressão regular regExp. Levanta um EOFError se não restarem
@@ -130,34 +108,33 @@ def _readRegExp(regExp):
     :raises ValueError: Se os caracteres não corresponderem ao padrão.
     """
     global _buffer
-    
+
     if isEmpty():
         raise EOFError()
-    
+
     compiledRegExp = re.compile(r"^\s*" + regExp)
     match = compiledRegExp.search(_buffer)
-    
+
     if match is None:
-        raise ValueError()  
-    
+        raise ValueError()
+
     s = match.group()
     _buffer = _buffer[match.end() :]
-    
-    return s.lstrip()
 
+    return s.lstrip()
 
 # -----------------------------------------------------------------------
 
-
 def isEmpty():
-    """Retorna True se não restarem caracteres não em branco na entrada padrão.
+    """
+    Retorna True se não restarem caracteres não em branco na entrada padrão.
 
     Caso contrário, retorna False.
 
     :returns: True se a entrada estiver vazia, False caso contrário.
     """
     global _buffer
-    
+
     while _buffer.strip() == "":
         line = sys.stdin.readline()
         if sys.hexversion < 0x03000000:
@@ -165,28 +142,27 @@ def isEmpty():
         if line == "":
             return True
         _buffer += line
-    
-    return False
 
+    return False
 
 # -----------------------------------------------------------------------
 
-
 def readInt():
-    """Discard leading white space characters from standard input.
+    """
+    Lê um inteiro da entrada padrão.
 
-    Then read from standard input a sequence of characters comprising an
-    integer. Convert the sequence of characters to an integer, and
-    return the integer.  Raise an EOFError if no non-whitespace
-    characters remain in standard input. Raise a ValueError if the next
-    characters to be read from standard input cannot comprise an
-    integer.
+    Descarta caracteres em branco iniciais e converte a sequência de
+    caracteres em um inteiro. Levanta EOFError se não houver caracteres
+    não em branco e ValueError se a sequência não for um inteiro válido.
 
+    :returns: O inteiro lido da entrada.
+    :raises EOFError: Se a entrada estiver vazia.
+    :raises ValueError: Se os caracteres não puderem ser convertidos.
     """
     s = _readRegExp(r"[-+]?(0[xX][\dA-Fa-f]+|0[0-7]*|\d+)")
     radix = 10
     strLength = len(s)
-    
+
     if (strLength >= 1) and (s[0:1] == "0"):
         radix = 8
     if (strLength >= 2) and (s[0:2] == "-0"):
@@ -199,122 +175,119 @@ def readInt():
         radix = 16
     if (strLength >= 3) and (s[0:3] == "-0X"):
         radix = 16
-    
-    return int(s, radix)
 
+    return int(s, radix)
 
 # -----------------------------------------------------------------------
 
-
 def readAllInts():
-    """Read all remaining strings from standard input, convert each to an int,
-    and return those ints in an array.
+    """
+    Lê todos os inteiros restantes da entrada padrão e os retorna como uma lista.
 
-    Raise a ValueError if any of the strings cannot be converted to an
-    int.
+    Levanta ValueError se algum dos valores não puder ser convertido.
 
+    :returns: Lista de inteiros lidos da entrada.
     """
     strings = readAllStrings()
     ints = []
-    
+
     for s in strings:
         i = int(s)
         ints.append(i)
-    
+
     return ints
 
-
 # -----------------------------------------------------------------------
-
 
 def readFloat():
-    """Discard leading white space characters from standard input.
-
-    Then read from standard input a sequence of characters comprising a
-    float. Convert the sequence of characters to a float, and return the
-    float.  Raise an EOFError if no non-whitespace characters remain in
-    standard input. Raise a ValueError if the next characters to be read
-    from standard input cannot comprise a float.
-
     """
-    s = _readRegExp(r"[-+]?(\d+(\.\d*)?|\.\d+)([eE][-+]?\d+)?")
-    
-    return float(s)
+    Lê um número em ponto flutuante da entrada padrão.
 
+    Descarta caracteres em branco iniciais e converte a sequência de
+    caracteres em um float. Levanta EOFError se não houver caracteres
+    não em branco e ValueError se a sequência não for um float válido.
+
+    :returns: O float lido da entrada.
+    :raises EOFError: Se a entrada estiver vazia.
+    :raises ValueError: Se os caracteres não puderem ser convertidos.
+    """
+    s = _readRegExp(r"[-+]?\d*(\.\d+)?([eE][-+]?\d+)?")
+    return float(s)
 
 # -----------------------------------------------------------------------
 
-
 def readAllFloats():
-    """Read all remaining strings from standard input, convert each to a float,
-    and return those floats in an array.
+    """
+    Lê todos os números em ponto flutuante restantes da entrada padrão e os retorna como uma lista.
 
-    Raise a ValueError if any of the strings cannot be converted to a
-    float.
+    Levanta ValueError se algum dos valores não puder ser convertido.
 
+    :returns: Lista de floats lidos da entrada.
     """
     strings = readAllStrings()
     floats = []
-    
+
     for s in strings:
         f = float(s)
         floats.append(f)
-    
+
     return floats
 
-
 # -----------------------------------------------------------------------
-
 
 def readBool():
-    """Discard leading white space characters from standard input. Then read
-    from standard input a sequence of characters comprising a bool. Convert the
-    sequence of characters to a bool, and return the bool.  Raise an EOFError
-    if no non-whitespace characters remain in standard input. Raise a
-    ValueError if the next characters to be read from standard input cannot
-    comprise a bool.
+    """
+    Lê um valor booleano da entrada padrão.
 
-    These character sequences can comprise a bool:
+    Descarta os caracteres em branco iniciais e converte a sequência de
+    caracteres em um bool. Levanta EOFError se não houver caracteres
+    não em branco e ValueError se a sequência não for um bool válido.
+
+    Estes valores podem ser convertidos para bool:
     -- True
     -- False
-    -- 1 (means true)
-    -- 0 (means false)
+    -- 1 (equivalente a True)
+    -- 0 (equivalente a False)
 
+    :returns: O valor booleano lido da entrada.
+    :raises EOFError: Se a entrada estiver vazia.
+    :raises ValueError: Se os caracteres não puderem ser convertidos.
     """
     s = _readRegExp(r"(True)|(False)|1|0")
-    
+
     if (s == "True") or (s == "1"):
         return True
-    
-    return False
 
+    return False
 
 # -----------------------------------------------------------------------
 
-
 def readAllBools():
-    """Read all remaining strings from standard input, convert each to a bool,
-    and return those bools in an array.
+    """
+    Lê todos os valores booleanos restantes da entrada padrão e os retorna como uma lista.
 
-    Raise a ValueError if any of the strings cannot be converted to a
-    bool.
+    Levanta ValueError se algum dos valores não puder ser convertido.
 
+    :returns: Lista de booleanos lidos da entrada.
     """
     strings = readAllStrings()
     bools = []
-    
-    for s in strings:
-        b = bool(s)
-        bools.append(b)
-    
-    return bools
 
+    for s in strings:
+        if s in ["True", "1"]:
+            bools.append(True)
+        elif s in ["False", "0"]:
+            bools.append(False)
+        else:
+            raise ValueError(f"Valor inválido para booleano: {s}")
+
+    return bools
 
 # -----------------------------------------------------------------------
 
-
 def readString():
-    """Descarta os caracteres em branco iniciais da entrada padrão.
+    """
+    Descarta os caracteres em branco iniciais da entrada padrão.
 
     Em seguida, lê da entrada padrão uma sequência de caracteres que compõem
     uma string e retorna a string. Levanta um EOFError se não restarem
@@ -326,35 +299,34 @@ def readString():
     s = _readRegExp(r"\S+")
     return s
 
-
 # -----------------------------------------------------------------------
 
-
 def readAllStrings():
-    """Read all remaining strings from standard input, and return them in an
-    array."""
-    
+    """
+    Lê todas as strings restantes da entrada padrão e as retorna como uma lista.
+
+    :returns: Lista de strings lidas da entrada.
+    """
     strings = []
 
     while not isEmpty():
         s = readString()
         strings.append(s)
-    
-    return strings
 
+    return strings
 
 # -----------------------------------------------------------------------
 
-
 def hasNextLine():
-    """Retorna True se houver uma próxima linha na entrada padrão.
+    """
+    Retorna True se houver uma próxima linha na entrada padrão.
 
     Caso contrário, retorna False.
 
     :returns: True se houver uma próxima linha, False caso contrário.
     """
     global _buffer
-    
+
     if _buffer != "":
         return True
     else:
@@ -365,12 +337,11 @@ def hasNextLine():
             return False
         return True
 
-
 # -----------------------------------------------------------------------
 
-
 def readLine():
-    """Lê e retorna a próxima linha da entrada padrão como uma string.
+    """
+    Lê e retorna a próxima linha da entrada padrão como uma string.
 
     Levanta um EOFError se não houver próxima linha.
 
@@ -378,60 +349,62 @@ def readLine():
     :raises EOFError: Se não houver próxima linha.
     """
     global _buffer
-    
+
     if not hasNextLine():
         raise EOFError()
     s = _buffer
     _buffer = ""
-    
-    return s.rstrip("\n")
 
+    return s.rstrip("\n")
 
 # -----------------------------------------------------------------------
 
-
 def readAllLines():
-    """Lê todas as linhas restantes da entrada padrão e retorna uma lista com elas.
+    """
+    Lê todas as linhas restantes da entrada padrão e retorna uma lista com elas.
 
     :returns: Lista de linhas lidas da entrada padrão.
     """
     lines = []
-    
+
     while hasNextLine():
         line = readLine()
         lines.append(line)
-    
-    return lines
 
+    return lines
 
 # -----------------------------------------------------------------------
 
-
 def readAll():
-    """Lê e retorna todo o conteúdo restante da entrada padrão como uma string.
+    """
+    Lê e retorna todo o conteúdo restante da entrada padrão como uma string.
 
     :returns: Todo o conteúdo restante da entrada padrão.
     """
     global _buffer
-    
+
     s = _buffer
     _buffer = ""
-    
+
     for line in sys.stdin:
         if sys.hexversion < 0x03000000:
             line = line.decode("utf-8")
         s += line
-    
+
     return s
 
-
 # =======================================================================
-# For Testing
+# Funções de teste.
 # =======================================================================
-
 
 def _testWrite():
-    writeln()
+    """
+    Testa as funções de escrita.
+
+    Chama funções write, writeln e writef com diferentes entradas para validação.
+
+    :returns: None
+    """
     writeln("string")
     writeln(123456)
     writeln(123.456)
@@ -445,18 +418,16 @@ def _testWrite():
     writef("<%s> <%8d> <%14.8f>\n", "string", 123456, 123.456)
     writef("formatstring\n")
 
-
 # -----------------------------------------------------------------------
 
-
 def _main():
-    """For testing.
-
-    The command-line argument should be the name of the function that
-    should be called.
-
     """
+    Função principal para teste.
 
+    O argumento da linha de comando deve ser o nome da função que será chamada.
+
+    :returns: None
+    """
     map = {
         "readInt": readInt,
         "readAllInts": readAllInts,
@@ -477,7 +448,6 @@ def _main():
         _testWrite()
     else:
         writeln(map[testId]())
-
 
 if __name__ == "__main__":
     _main()

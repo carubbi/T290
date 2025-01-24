@@ -3,3 +3,4 @@ networkx
 numpy
 typing_extensions
 pygame
+color

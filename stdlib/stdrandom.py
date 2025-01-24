@@ -1,84 +1,103 @@
-# code based on https://introcs.cs.princeton.edu/python/code/stdlib-python.zip as downloaded in dec 2017
-
 """stdrandom.py.
 
-The stdrandom module defines functions related to pseudo-random numbers.
+O módulo stdrandom define funções relacionadas a números pseudo-aleatórios.
 
 """
-
-# -----------------------------------------------------------------------
 
 import math
 import random
 
 # -----------------------------------------------------------------------
 
-
 def seed(i=None):
-    """Seed the random number generator as hash(i), where i is an int.
+    """
+    Define a semente para o gerador de números aleatórios como hash(i), onde i é um inteiro.
 
-    If i is None, then seed using the current time or, quoting the help
-    page for random.seed(), "an operating system specific randomness
-    source if available."
+    Se i for None, utiliza o tempo atual ou, conforme descrito na página de ajuda para random.seed(),
+    "uma fonte de aleatoriedade específica do sistema operacional, se disponível".
 
+    :param i: Inteiro usado como semente, ou None para comportamento padrão.
+    :returns: None
     """
     random.seed(i)
 
-
 # -----------------------------------------------------------------------
-
 
 def uniform(hi):
-    """Return an integer chosen uniformly from the range [0, hi)."""
+    """
+    Retorna um número inteiro escolhido uniformemente no intervalo [0, hi).
+
+    :param hi: Limite superior (exclusivo) para o número aleatório.
+    :returns: Um número inteiro aleatório.
+    """
     return random.randrange(0, hi)
 
-
 # -----------------------------------------------------------------------
+
 def uniformInt(lo, hi):
-    """Return an integer chosen uniformly from the range [lo, hi)."""
+    """
+    Retorna um número inteiro escolhido uniformemente no intervalo [lo, hi).
+
+    :param lo: Limite inferior (inclusivo) para o número aleatório.
+    :param hi: Limite superior (exclusivo) para o número aleatório.
+    :returns: Um número inteiro aleatório.
+    """
     return random.randrange(lo, hi)
 
-
 # -----------------------------------------------------------------------
-
 
 def uniformFloat(lo, hi):
-    """Return a number chosen uniformly from the range [lo, hi)."""
+    """
+    Retorna um número em ponto flutuante escolhido uniformemente no intervalo [lo, hi).
+
+    :param lo: Limite inferior (inclusivo) para o número aleatório.
+    :param hi: Limite superior (exclusivo) para o número aleatório.
+    :returns: Um número em ponto flutuante aleatório.
+    """
     return random.uniform(lo, hi)
 
-
 # -----------------------------------------------------------------------
-
 
 def bernoulli(p=0.5):
-    """Return True with probability p."""
-    return random.random() < p
+    """
+    Retorna True com probabilidade p.
 
+    :param p: Probabilidade de sucesso (0 <= p <= 1).
+    :returns: True com probabilidade p, caso contrário False.
+    """
+    return random.random() < p
 
 # -----------------------------------------------------------------------
 
-
 def binomial(n, p=0.5):
-    """Return the number of heads in n coin flips, each of which is heads with
-    probability p."""
+    """
+    Retorna o número de sucessos em n experimentos de Bernoulli, cada um com probabilidade de sucesso p.
+
+    :param n: Número de experimentos.
+    :param p: Probabilidade de sucesso em cada experimento (0 <= p <= 1).
+    :returns: Número de sucessos em n experimentos.
+    """
     heads = 0
     for i in range(n):
         if bernoulli(p):
             heads += 1
     return heads
 
-
 # -----------------------------------------------------------------------
 
-
 def gaussian(mean=0.0, stddev=1.0):
-    """Return a float according to a standard Gaussian distribution with the
-    given mean (mean) and standard deviation (stddev)."""
+    """
+    Retorna um número em ponto flutuante de acordo com uma distribuição Gaussiana padrão com média (mean)
+    e desvio padrão (stddev) fornecidos.
 
-    # Approach 1:
+    :param mean: Média da distribuição.
+    :param stddev: Desvio padrão da distribuição.
+    :returns: Um número em ponto flutuante da distribuição Gaussiana.
+    """
+    # Abordagem 1:
     # return random.gauss(mu, sigma)
 
-    # Approach 2: Use the polar form of the Box-Muller transform.
+    # Abordagem 2: Usa a forma polar da transformação de Box-Muller.
     x = uniformFloat(-1.0, 1.0)
     y = uniformFloat(-1.0, 1.0)
     r = x * x + y * y
@@ -87,19 +106,19 @@ def gaussian(mean=0.0, stddev=1.0):
         y = uniformFloat(-1.0, 1.0)
         r = x * x + y * y
     g = x * math.sqrt(-2 * math.log(r) / r)
-    # Remark:  x * math.sqrt(-2 * math.log(r) / r)
-    # is an independent random gaussian
+    # Nota: x * math.sqrt(-2 * math.log(r) / r) é um número gaussiano independente.
     return mean + stddev * g
-
 
 # -----------------------------------------------------------------------
 
-
 def discrete(a):
-    """Return a float from a discrete distribution: i with probability a[i].
+    """
+    Retorna um índice com base em uma distribuição discreta: i com probabilidade a[i].
 
-    Precondition: the elements of array a sum to 1.
+    Pré-condição: os elementos do array a somam 1.
 
+    :param a: Lista de probabilidades associadas a cada índice.
+    :returns: Um índice baseado na distribuição fornecida.
     """
     r = uniformFloat(0.0, sum(a))
     subtotal = 0.0
@@ -107,46 +126,40 @@ def discrete(a):
         subtotal += a[i]
         if subtotal > r:
             return i
-    # return len(a) - 1
-
 
 # -----------------------------------------------------------------------
-
 
 def shuffle(a):
-    """Shuffle array a."""
+    """
+    Embaralha os elementos do array a.
 
-    # Approach 1:
-    # for i in range(len(a)):
-    #     j = i + uniformInt(len(a) - i)
-    #     temp = a[i]
-    #     a[i] = a[j]
-    #     a[j] = temp
-
-    # Approach 2:
+    :param a: Lista a ser embaralhada.
+    :returns: None
+    """
     random.shuffle(a)
 
-
 # -----------------------------------------------------------------------
-
 
 def exp(lambd):
-    """Return a float from an exponential distribution with rate lambd."""
+    """
+    Retorna um número em ponto flutuante de uma distribuição exponencial com taxa lambd.
 
-    # Approach 1:
-    # return random.expovariate(lambd)
-
-    # Approach 2:
+    :param lambd: Taxa da distribuição exponencial (lambda > 0).
+    :returns: Um número em ponto flutuante da distribuição exponencial.
+    """
     return -math.log(1 - random.random()) / lambd
-
 
 # -----------------------------------------------------------------------
 
-
 def _main():
-    """For testing."""
-    import sys
+    """
+    Função principal para testes.
 
+    Gera e exibe valores baseados em diferentes distribuições e funções implementadas.
+
+    :returns: None
+    """
+    import sys
     from stdio import writef, writeln
 
     seed(1)
@@ -160,15 +173,7 @@ def _main():
         writef("%2d ", discrete([0.5, 0.3, 0.1, 0.1]))
         writeln()
 
-
 if __name__ == "__main__":
     _main()
 
 # -----------------------------------------------------------------------
-
-# python stdrandom.py 5
-#  27 60.65914 False    41 9.01682  0
-#  55 46.88378  True    48 8.90171  0
-#  58 92.96468  True    52 9.12770  0
-#  79 64.41387 False    47 9.49241  0
-#  29 32.30299  True    45 8.77630  1
