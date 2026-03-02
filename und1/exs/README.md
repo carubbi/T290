@@ -15,6 +15,10 @@ Este diretório concentra o material para **Avaliação 1 (AV1)** de Teoria dos 
 2. Consulte as respostas individuais em `respostas/`.
 3. Use `lista_u1.pdf` quando precisar da versão pronta para impressão/compartilhamento.
 
+## Lista de Exercícios
+
+- [Lista de exercícios](./lista_u1.md).
+
 ## Respostas por Questão
 
 - [Questão 1](./respostas/q01.md)
@@ -138,3 +142,8 @@ As respostas seguem, em geral, este formato:
 ## Observação
 
 Em questões com figuras no enunciado original, confira `imgs/` para validar notação de vértices e arestas antes de comparar com a resposta.
+
+## Referências Bibliográficas
+
+- FEOFILOFF, P. *Exercícios de teoria dos grafos*. São Paulo: IME-USP, 2013. Disponível em: <https://www.ime.usp.br/~pf/grafos-exercicios/>. Acesso em: 2 mar. 2026.
+- NICOLETTI, M. C.; HRUSCHKA JR., E. R. *Fundamentos da teoria dos grafos para computação*. 3. ed. Rio de Janeiro: LTC, 2018. Disponível em: <https://www.grupogen.com.br/fundamentos-da-teoria-dos-grafos-para-computacao>. Acesso em: 2 mar. 2026.
