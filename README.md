@@ -5,7 +5,7 @@ Material da disciplina **Resolução de Problemas com Grafos**.
 ## Estrutura
 
 - `dataset/`: conjuntos de dados para exercícios e experimentos.
-- `algs4-py/`: repositório externo com implementações em Python (adicionado como gitlink).
+- `algs4-py/`: implementações em Python versionadas diretamente neste repositório.
 - `und1/exs/`: lista de exercícios da Unidade 1, enunciados, imagens e respostas.
 - `prof/`: materiais de apoio do professor.
 
